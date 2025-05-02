@@ -105,7 +105,18 @@ spec:
 kubectl apply -f app.yaml -n argocd
 ```
 
-Then sync using:
+### Install Argo CD CLI
+```
+brew install argocd       # macOS
+choco install argocd-cli  # Windows
+```
+
+### Login to Argo CD via CLI
+```
+argocd login localhost:8080 --username admin --password <password>
+```
+
+### Sync the App
 
 ```bash
 argocd app sync guestbook
