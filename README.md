@@ -134,6 +134,60 @@ argocd app sync guestbook
 
 ---
 
+### Cleanup the resources
+
+---
+
+### ✅ 1. **Stop the Argo CD Port Forward** (CLI access or UI)
+
+If you ran this:
+
+```bash
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+```
+
+Just press **`Ctrl+C`** in that terminal. This only stops the local port forwarding — Argo CD itself is still running in the cluster.
+
+---
+
+### ✅ 2. **Stop Argo CD Deployment** (temporary shutdown)
+
+To stop Argo CD entirely in your cluster, you can scale down the deployments:
+
+```bash
+kubectl scale deployment argocd-server -n argocd --replicas=0
+kubectl scale deployment argocd-repo-server -n argocd --replicas=0
+kubectl scale deployment argocd-application-controller -n argocd --replicas=0
+kubectl scale deployment argocd-dex-server -n argocd --replicas=0
+```
+
+> This will **stop all Argo CD components** without uninstalling anything.
+
+To bring it back:
+
+```bash
+kubectl scale deployment argocd-server -n argocd --replicas=1
+# repeat for the others as needed
+```
+
+---
+
+### ✅ 3. **Completely Uninstall Argo CD**
+
+If you're done with Argo CD:
+
+```bash
+kubectl delete namespace argocd
+```
+
+Or if you installed it using a manifest:
+
+```bash
+kubectl delete -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+```
+
+---
+
 ## 🔧 **Other Use Cases with Argo CD**
 
 ### 1. **Multi-Environment Management**
