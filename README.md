@@ -124,6 +124,63 @@ argocd app sync guestbook
 
 ---
 
+
+### Check Services in `argocd` Namespace
+
+```bash
+kubectl get svc -n argocd
+```
+
+Look for something like:
+
+```
+NAME            TYPE       CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE
+guestbook-ui    NodePort   10.101.13.213    <none>        80:30987/TCP     5m
+```
+
+---
+
+### Expose and Open in Browser
+
+Run:
+
+```bash
+minikube service guestbook-ui -n argocd
+```
+
+This will:
+
+* Automatically open the browser to the guestbook app.
+* Or show a URL like `http://127.0.0.1:30987`.
+
+---
+
+### ✅ (Optional) If It’s a ClusterIP, Use Port Forwarding
+
+If the service is **ClusterIP** instead of NodePort, forward manually:
+
+```bash
+kubectl port-forward svc/guestbook-ui 8080:80 -n argocd
+```
+
+Then open your browser at:
+
+```
+http://localhost:8080
+```
+
+---
+
+### ✅ Bonus: Verify the Pod
+
+Make sure your app pod is running:
+
+```bash
+kubectl get pods -n argocd -l app=guestbook-ui
+```
+
+---
+
 ## 💻 5. **Hands-On Demo Flow**
 
 * Show current state of the cluster: no guestbook app yet.
